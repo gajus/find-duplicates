@@ -10,9 +10,60 @@ Finds duplicate entries in a JavaScript array using an iteratee.
 
 ## Usage
 
+`findDuplicates` produces an array of duplicate input array entries grouped by the uniting iteratee value.
+
 ```js
 import findDuplicates from 'find-duplicates';
 
+const haystack = [
+  {
+    id: 1,
+    name: 'a'
+  },
+  {
+    id: 2,
+    name: 'a'
+  },
+  {
+    id: 3,
+    name: 'b'
+  },
+  {
+    id: 4,
+    name: 'b'
+  },
+  {
+    id: 5,
+    name: 'c'
+  }
+];
 
+const duplicates = findDuplicates(haystack, (subject) => {
+  return subject.name;
+});
+
+duplicates;
+// [
+//   [
+//     {
+//       id: 1,
+//       name: 'a'
+//     },
+//     {
+//       id: 2,
+//       name: 'a'
+//     }
+//   ],
+//   [
+//     {
+//       id: 3,
+//       name: 'b'
+//     },
+//     {
+//       id: 4,
+//       name: 'b'
+//     }
+//   ]
+// ]
 
 ```
