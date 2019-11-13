@@ -21,9 +21,9 @@ test('returns duplicate values (simple)', (t) => {
     [
       [
         'a',
-        'a'
-      ]
-    ]
+        'a',
+      ],
+    ],
   );
 });
 
@@ -31,20 +31,20 @@ test('returns duplicate values (object)', (t) => {
   const haystack = [
     {
       id: 1,
-      name: 'a'
+      name: 'a',
     },
     {
       id: 2,
-      name: 'a'
+      name: 'a',
     },
     {
       id: 3,
-      name: 'b'
+      name: 'b',
     },
     {
       id: 4,
-      name: 'c'
-    }
+      name: 'c',
+    },
   ];
 
   const duplicates = findDuplicates(haystack, (subject) => {
@@ -57,14 +57,14 @@ test('returns duplicate values (object)', (t) => {
       [
         {
           id: 1,
-          name: 'a'
+          name: 'a',
         },
         {
           id: 2,
-          name: 'a'
-        }
-      ]
-    ]
+          name: 'a',
+        },
+      ],
+    ],
   );
 });
 
@@ -78,12 +78,12 @@ test('returns duplicate values (multiple)', (t) => {
     [
       [
         'a',
-        'a'
+        'a',
       ],
       [
         'b',
-        'b'
-      ]
-    ]
+        'b',
+      ],
+    ],
   );
 });
