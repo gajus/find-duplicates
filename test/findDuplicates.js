@@ -20,8 +20,14 @@ test('returns duplicate values (simple)', (t) => {
     duplicates,
     [
       [
-        'a',
-        'a',
+        {
+          index: 0,
+          value: 'a',
+        },
+        {
+          index: 1,
+          value: 'a',
+        },
       ],
     ],
   );
@@ -56,12 +62,18 @@ test('returns duplicate values (object)', (t) => {
     [
       [
         {
-          id: 1,
-          name: 'a',
+          index: 0,
+          value: {
+            id: 1,
+            name: 'a',
+          },
         },
         {
-          id: 2,
-          name: 'a',
+          index: 1,
+          value: {
+            id: 2,
+            name: 'a',
+          },
         },
       ],
     ],
@@ -77,12 +89,24 @@ test('returns duplicate values (multiple) [0]', (t) => {
     duplicates,
     [
       [
-        'a',
-        'a',
+        {
+          index: 0,
+          value: 'a',
+        },
+        {
+          index: 1,
+          value: 'a',
+        },
       ],
       [
-        'b',
-        'b',
+        {
+          index: 2,
+          value: 'b',
+        },
+        {
+          index: 3,
+          value: 'b',
+        },
       ],
     ],
   );
@@ -97,13 +121,28 @@ test('returns duplicate values (multiple) [1]', (t) => {
     duplicates,
     [
       [
-        'a',
-        'a',
-        'a',
+        {
+          index: 0,
+          value: 'a',
+        },
+        {
+          index: 1,
+          value: 'a',
+        },
+        {
+          index: 3,
+          value: 'a',
+        },
       ],
       [
-        'b',
-        'b',
+        {
+          index: 2,
+          value: 'b',
+        },
+        {
+          index: 4,
+          value: 'b',
+        },
       ],
     ],
   );

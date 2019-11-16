@@ -4,7 +4,12 @@ import {
   map,
 } from 'inline-loops.macro';
 
-export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $ReadOnlyArray<$ReadOnlyArray<T>> => {
+type DuplicatePointerType<T> = {|
+  +index: number,
+  +value: T,
+|};
+
+export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $ReadOnlyArray<$ReadOnlyArray<DuplicatePointerType<T>>> => {
   let memberFingerprintsIndexes = [];
 
   const memberFingerprints = map(members, (member, index) => {
@@ -37,14 +42,23 @@ export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $Rea
 
           if (found) {
             duplicateMembers.push(
-              members[index1],
+              {
+                index: index1,
+                value: members[index1],
+              },
             );
           } else {
             found = true;
 
             duplicateMembers.push(
-              members[index0],
-              members[index1],
+              {
+                index: index0,
+                value: members[index0],
+              },
+              {
+                index: index1,
+                value: members[index1],
+              },
             );
           }
         }

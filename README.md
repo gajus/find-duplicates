@@ -8,9 +8,21 @@
 
 Finds duplicate entries in a JavaScript array using an iteratee.
 
+## API
+
+```js
+type DuplicatePointerType<T> = {|
+  +index: number,
+  +value: T,
+|};
+
+const findDuplicates = <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string) => $ReadOnlyArray<$ReadOnlyArray<DuplicatePointerType<T>>>;
+
+```
+
 ## Usage
 
-`findDuplicates` produces an array of duplicate input array entries grouped by the uniting iteratee value.
+`findDuplicates` produces an array of duplicate input array entries as identified using iteratee function.
 
 ```js
 import findDuplicates from 'find-duplicates';
@@ -22,11 +34,11 @@ const haystack = [
   },
   {
     id: 2,
-    name: 'a'
+    name: 'b'
   },
   {
     id: 3,
-    name: 'b'
+    name: 'a'
   },
   {
     id: 4,
@@ -43,28 +55,40 @@ const duplicates = findDuplicates(haystack, (subject) => {
 });
 
 duplicates;
-// [
-//   [
-//     {
-//       id: 1,
-//       name: 'a'
-//     },
-//     {
-//       id: 2,
-//       name: 'a'
-//     }
-//   ],
-//   [
-//     {
-//       id: 3,
-//       name: 'b'
-//     },
-//     {
-//       id: 4,
-//       name: 'b'
-//     }
-//   ]
-// ]
+[
+  [
+    {
+      index: 0,
+      value: {
+        id: 1,
+        name: 'a'
+      }
+    },
+    {
+      index: 2,
+      value: {
+        id: 3,
+        name: 'a'
+      }
+    }
+  ],
+  [
+    {
+      index: 1,
+      value: {
+        id: 2,
+        name: 'b'
+      },
+    },
+    {
+      index: 3,
+      value: {
+        id: 4,
+        name: 'b'
+      },
+    },
+  ]
+]
 
 ```
 
