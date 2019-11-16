@@ -1,9 +1,5 @@
 // @flow
 
-import {
-  map,
-} from 'inline-loops.macro';
-
 type DuplicatePointerType<T> = {|
   +index: number,
   +value: T,
@@ -12,39 +8,42 @@ type DuplicatePointerType<T> = {|
 export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $ReadOnlyArray<$ReadOnlyArray<DuplicatePointerType<T>>> => {
   let memberFingerprintsIndexes = [];
 
-  const memberFingerprints = map(members, (member, index) => {
-    memberFingerprintsIndexes.push(index);
+  const memberFingerprints = [];
 
-    return iteratee(member);
-  });
-
-  const duplicateMemberTuples = [];
-
-  const memberSize = memberFingerprints.length;
+  const memberSize = members.length;
 
   let index0 = -1;
 
-  while (index0++ < memberSize) {
+  while (++index0 < memberSize) {
+    memberFingerprintsIndexes.push(index0);
+    memberFingerprints.push(iteratee(members[index0]));
+  }
+
+  const duplicateMemberTuples = [];
+
+  let index1 = -1;
+
+  while (++index1 < memberSize) {
     const duplicateMembers = [];
 
     const nextMemberFingerprintIndexes = [];
 
     let found = false;
 
-    let nextIndex0 = index0;
+    let nextIndex1 = index1;
 
-    for (const index1 of memberFingerprintsIndexes) {
-      if (memberFingerprints[index0] === memberFingerprints[index1]) {
-        if (index0 !== index1) {
-          if (index1 === nextIndex0 + 1) {
-            nextIndex0++;
+    for (const index2 of memberFingerprintsIndexes) {
+      if (memberFingerprints[index1] === memberFingerprints[index2]) {
+        if (index1 !== index2) {
+          if (index2 === nextIndex1 + 1) {
+            nextIndex1++;
           }
 
           if (found) {
             duplicateMembers.push(
               {
-                index: index1,
-                value: members[index1],
+                index: index2,
+                value: members[index2],
               },
             );
           } else {
@@ -52,21 +51,21 @@ export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $Rea
 
             duplicateMembers.push(
               {
-                index: index0,
-                value: members[index0],
-              },
-              {
                 index: index1,
                 value: members[index1],
+              },
+              {
+                index: index2,
+                value: members[index2],
               },
             );
           }
         }
       } else {
-        nextMemberFingerprintIndexes.push(index1);
+        nextMemberFingerprintIndexes.push(index2);
       }
 
-      index0 = nextIndex0;
+      index1 = nextIndex1;
     }
 
     memberFingerprintsIndexes = nextMemberFingerprintIndexes;
