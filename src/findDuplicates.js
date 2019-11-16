@@ -5,12 +5,12 @@ import {
 } from 'inline-loops.macro';
 
 export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $ReadOnlyArray<$ReadOnlyArray<T>> => {
-  const memberFingerprints = map(members, (member) => {
-    return iteratee(member);
-  });
+  let memberFingerprintsIndexes = [];
 
-  let memberFingerprintsIndexes = map(memberFingerprints, (member, index) => {
-    return index;
+  const memberFingerprints = map(members, (member, index) => {
+    memberFingerprintsIndexes.push(index);
+
+    return iteratee(member);
   });
 
   const duplicateMemberTuples = [];
