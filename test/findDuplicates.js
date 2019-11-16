@@ -8,7 +8,7 @@ test('returns empty array if there are no duplicates', (t) => {
     return subject;
   });
 
-  t.true(duplicates.length === 0);
+  t.deepEqual(duplicates, []);
 });
 
 test('returns duplicate values (simple)', (t) => {

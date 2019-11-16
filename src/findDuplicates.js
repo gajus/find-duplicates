@@ -1,42 +1,54 @@
 // @flow
 
-export default <T: *>(haystack: $ReadOnlyArray<T>, iteratee: (T) => *): $ReadOnlyArray<$ReadOnlyArray<T>> => {
-  const duplicateNeedles = haystack
-    .reduce((accumulator, currentValue, index, self) => {
-      const needle = iteratee(currentValue);
+import {
+  map,
+} from 'inline-loops.macro';
 
-      const maybeSelfIndex = self.findIndex((maybeNeedle) => {
-        return iteratee(maybeNeedle) === needle;
-      });
+export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $ReadOnlyArray<$ReadOnlyArray<T>> => {
+  const memberFingerprints = map(members, (member) => {
+    return iteratee(member);
+  });
 
-      if (maybeSelfIndex === index) {
-        return accumulator;
-      }
+  let memberFingerprintsIndexes = map(memberFingerprints, (member, index) => {
+    return index;
+  });
 
-      const maybeDuplicateSelfIndex = accumulator.findIndex((maybeNeedle) => {
-        return iteratee(maybeNeedle) === needle;
-      });
+  const duplicateMemberTuples = [];
 
-      if (maybeDuplicateSelfIndex === -1) {
-        accumulator.push(currentValue);
-      }
+  let index0 = -1;
 
-      return accumulator;
-    }, []);
+  for (const memberFingerprint0 of memberFingerprints) {
+    index0++;
 
-  const duplicates = [];
+    const duplicateMembers = [];
 
-  for (const duplicateNeedle of duplicateNeedles) {
-    const group = [];
+    const nextMemberFingerprintIndexes = [];
 
-    for (const subject of haystack) {
-      if (iteratee(duplicateNeedle) === iteratee(subject)) {
-        group.push(subject);
+    for (const index1 of memberFingerprintsIndexes) {
+      if (memberFingerprint0 === memberFingerprints[index1]) {
+        if (index0 !== index1) {
+          if (duplicateMembers.length === 0) {
+            duplicateMembers.push(
+              members[index0],
+              members[index1],
+            );
+          } else {
+            duplicateMembers.push(
+              members[index1],
+            );
+          }
+        }
+      } else {
+        nextMemberFingerprintIndexes.push(index1);
       }
     }
 
-    duplicates.push(group);
+    memberFingerprintsIndexes = nextMemberFingerprintIndexes;
+
+    if (duplicateMembers.length > 0) {
+      duplicateMemberTuples.push(duplicateMembers);
+    }
   }
 
-  return duplicates;
+  return duplicateMemberTuples;
 };
