@@ -9,11 +9,15 @@ export default <T: *>(haystack: $ReadOnlyArray<T>, iteratee: (T) => *): $ReadOnl
         return iteratee(maybeNeedle) === needle;
       });
 
+      if (maybeSelfIndex === index) {
+        return accumulator;
+      }
+
       const maybeDuplicateSelfIndex = accumulator.findIndex((maybeNeedle) => {
         return iteratee(maybeNeedle) === needle;
       });
 
-      if (maybeSelfIndex !== index && maybeDuplicateSelfIndex === -1) {
+      if (maybeDuplicateSelfIndex === -1) {
         accumulator.push(currentValue);
       }
 
