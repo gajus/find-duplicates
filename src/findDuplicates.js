@@ -24,16 +24,20 @@ export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $Rea
 
     const nextMemberFingerprintIndexes = [];
 
+    let found = false;
+
     for (const index1 of memberFingerprintsIndexes) {
       if (memberFingerprint0 === memberFingerprints[index1]) {
         if (index0 !== index1) {
-          if (duplicateMembers.length === 0) {
+          if (found) {
             duplicateMembers.push(
-              members[index0],
               members[index1],
             );
           } else {
+            found = true;
+
             duplicateMembers.push(
+              members[index0],
               members[index1],
             );
           }
