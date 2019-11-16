@@ -68,7 +68,7 @@ test('returns duplicate values (object)', (t) => {
   );
 });
 
-test('returns duplicate values (multiple)', (t) => {
+test('returns duplicate values (multiple) [0]', (t) => {
   const duplicates = findDuplicates(['a', 'a', 'b', 'b', 'c'], (subject) => {
     return subject;
   });
@@ -77,6 +77,27 @@ test('returns duplicate values (multiple)', (t) => {
     duplicates,
     [
       [
+        'a',
+        'a',
+      ],
+      [
+        'b',
+        'b',
+      ],
+    ],
+  );
+});
+
+test('returns duplicate values (multiple) [1]', (t) => {
+  const duplicates = findDuplicates(['a', 'a', 'b', 'a', 'b', 'c'], (subject) => {
+    return subject;
+  });
+
+  t.deepEqual(
+    duplicates,
+    [
+      [
+        'a',
         'a',
         'a',
       ],
