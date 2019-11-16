@@ -67,3 +67,12 @@ duplicates;
 // ]
 
 ```
+
+## Benchmark
+
+Run benchmark before making changes and ensure that performance does not degrade after changes.
+
+```bash
+$ npm run benchmark
+
+```
