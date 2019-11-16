@@ -15,11 +15,11 @@ export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $Rea
 
   const duplicateMemberTuples = [];
 
+  const memberSize = memberFingerprints.length;
+
   let index0 = -1;
 
-  for (const memberFingerprint0 of memberFingerprints) {
-    index0++;
-
+  while (index0++ < memberSize) {
     const duplicateMembers = [];
 
     const nextMemberFingerprintIndexes = [];
@@ -27,7 +27,7 @@ export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $Rea
     let found = false;
 
     for (const index1 of memberFingerprintsIndexes) {
-      if (memberFingerprint0 === memberFingerprints[index1]) {
+      if (memberFingerprints[index0] === memberFingerprints[index1]) {
         if (index0 !== index1) {
           if (found) {
             duplicateMembers.push(
