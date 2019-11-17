@@ -5,9 +5,10 @@ type DuplicatePointerType<T> = {|
   +value: T,
 |};
 
-export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $ReadOnlyArray<$ReadOnlyArray<DuplicatePointerType<T>>> => {
-  let memberFingerprintsIndexes = [];
-
+export default <T: *>(
+  members: $ReadOnlyArray<T>,
+  iteratee: (T) => string,
+): $ReadOnlyArray<$ReadOnlyArray<DuplicatePointerType<T>>> => {
   const memberFingerprints = [];
 
   const memberSize = members.length;
@@ -15,63 +16,41 @@ export default <T: *>(members: $ReadOnlyArray<T>, iteratee: (T) => string): $Rea
   let index0 = -1;
 
   while (++index0 < memberSize) {
-    memberFingerprintsIndexes.push(index0);
     memberFingerprints.push(iteratee(members[index0]));
   }
 
-  const duplicateMemberTuples = [];
+  const valueToIndex = new Map();
 
   let index1 = -1;
 
   while (++index1 < memberSize) {
-    const duplicateMembers = [];
+    const value = memberFingerprints[index1];
 
-    const nextMemberFingerprintIndexes = [];
+    let entry = valueToIndex.get(value);
 
-    let found = false;
+    if (entry) {
+      entry.push(index1);
+    } else {
+      entry = [
+        index1,
+      ];
 
-    let nextIndex1 = index1;
-
-    for (const index2 of memberFingerprintsIndexes) {
-      if (memberFingerprints[index1] === memberFingerprints[index2]) {
-        if (index1 !== index2) {
-          if (index2 === nextIndex1 + 1) {
-            nextIndex1++;
-          }
-
-          if (found) {
-            duplicateMembers.push(
-              {
-                index: index2,
-                value: members[index2],
-              },
-            );
-          } else {
-            found = true;
-
-            duplicateMembers.push(
-              {
-                index: index1,
-                value: members[index1],
-              },
-              {
-                index: index2,
-                value: members[index2],
-              },
-            );
-          }
-        }
-      } else {
-        nextMemberFingerprintIndexes.push(index2);
-      }
-
-      index1 = nextIndex1;
+      valueToIndex.set(value, entry);
     }
+  }
 
-    memberFingerprintsIndexes = nextMemberFingerprintIndexes;
+  const duplicateMemberTuples = [];
 
-    if (duplicateMembers.length > 0) {
-      duplicateMemberTuples.push(duplicateMembers);
+  for (const indexes of valueToIndex.values()) {
+    if (indexes.length > 1) {
+      duplicateMemberTuples.push(
+        indexes.map((index) => {
+          return {
+            index,
+            value: members[index],
+          };
+        }),
+      );
     }
   }
 
