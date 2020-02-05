@@ -1,7 +1,7 @@
 // @flow
 
 import test from 'ava';
-import findDuplicates from '../src/findDuplicates';
+import findDuplicates from '../../src/findDuplicates';
 
 test('returns empty array if there are no duplicates', (t) => {
   const duplicates = findDuplicates(['a', 'b', 'c'], (subject) => {
